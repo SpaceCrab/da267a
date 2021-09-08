@@ -4,6 +4,12 @@
 #include <esp_task_wdt.h>
 #include <esp32/rom/ets_sys.h>
 
+uint32_t timeMs()
+{
+	return xTaskGetTickCount() * portTICK_PERIOD_MS;
+}
+
+
 void waitMS(unsigned int ms)
 {
 	TickType_t delay = (ms / portTICK_PERIOD_MS );
@@ -64,27 +70,45 @@ void app_main()
 
 		int r = getRandomRange(1000, 5000);
 
-		waitMS(r);
+
+		uint8_t winner =0;
+		unsigned int startMS = timeMs();
+
+		while(timeMs() - startMS < r)
+		{
+
+			if (isButtonBPressed())
+			{
+				winner = 1;
+				break;
+			}
+			else if(isButtonAPressed())
+			{
+				winner =2;
+				break;
+			}
+		}
+
 
 		setLEDA(1);
 		setLEDB(1);
 
-		uint8_t winner =0;
-
 		while(!winner)
 		{
-			if(isButtonBPressed())
+			
+			if (isButtonBPressed())
 			{
-				winnerAnim(1);
-				winner = 1;
+				winner = 2;
 			}
 			else if(isButtonAPressed())
 			{
-				winnerAnim(0);
-				winner = 1;
+				winner =1;
 			}
 
 		}
+
+		if(winner == 1) winnerAnim(0);
+		else winnerAnim(1);
 	}
 }
  
