@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 //intializes the 4 pins
-void initpins();
+void initPins();
 
 //switches state of LEDA
 void setLEDA(uint8_t level);
