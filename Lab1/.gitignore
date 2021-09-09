@@ -1,2 +1,3 @@
 .pio
-.ccls
+*.ccls
+'.ccls-cache/'
