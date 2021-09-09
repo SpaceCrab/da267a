@@ -1,0 +1,96 @@
+Intro 
+	om programmet hanterar mer än små mängder 
+	data behöver data struktureras
+
+	ex: Arrays linked lists queue stack hastables osv
+
+	en datastruktur är en grupp av dataelement som 
+	sammantälls under ett namn och definierar ett sätt att
+	lagra och struktureraa datan
+
+Binary search tree
+	en typ av datastruktur som simplifierar sökoperationer 
+	efter specifika element 
+
+typer av datastrukturer
+	primitiva
+		ex int float...
+	icke primitiva 
+		arrays Lists files
+	
+val av datastruktur 
+	vad ska lagras och vilka operationer skall genomföras
+
+array 
+	en lista med element som kan nås med hjälp av index
+
+Struct 
+	används för att spara relaterad information om en entitet
+
+	typedef 
+	{
+		data_type name
+		data_typ1 name1
+	}name;
+
+	name = name.name
+
+Linked lists
+	en lista där varje nod refererar till nästa nod 
+	efter som att varje element refererar till nästa nod 
+	kan dev växa och krympa
+
+	de blir något långsammare men i vissa fall lite effektivare med minnet
+	för att söka måste hela listan traverseras, förutom om
+	adressen redan är känd
+
+	sista elementet har next pekaren null
+	
+	för att utöka lista läggs det till i början av listan 
+
+	node * insertValueLl(node * start, int val)
+	{
+		node * new _node;
+		new_node = (node *)malloc(sizeof(node));
+		new_node -> val;
+		new_node ->next = start->next;
+		start = new_node;
+		return start;
+	}
+
+	för att ta bort ett element i listan
+		först ta redo på pekaren innan och efter.
+		därefter fria elementet som ska bort 
+		därefter peka om föreliggande element
+
+
+	typedef struct
+	{
+		int val;
+		struct node *next;
+	}name;
+
+	cirkulär länkad lista
+		en LL där sista elementet länkar till första elementet
+
+		för att inserta i slutet av en cirkulär länkad lista måste pekaren
+		för start sparas utanför den länkade listan.
+	
+	dubbellänkad lista 
+		en LL där varje element inehåller en pekare 
+		till elementet före och till elementet efter.
+
+Pointers 
+	pointers är en variabel som innehåller en minnesadress
+
+	int x = 10;
+	int *ptr;
+	ptr = &x => ptr = 1003 dvs xs adress
+
+Buffer och köer
+	en buffer är ett ställe i minne där man temporärt sparar data 
+	det används ofta när man ska använda data ifrån IO
+	
+	Köer är en FIFO struktur där 
+	man kan skapa cirkulära köer med arrayer
+
