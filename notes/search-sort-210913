@@ -1,0 +1,33 @@
+Searching and sorting 
+
+bla bla bubblesort
+
+merge sort 
+	dividera listan till enskillda element 
+
+	slå i hop enskillda element 
+
+	sortera listor och mergea - Repeat
+
+	för n element krävs n*log2n operationer
+
+Tree
+	en enkelriktad graf där varje par av noder är kopplade med en path 
+
+	Rooted Tree
+		ett Tree kallas rooted om en vertex kallas för root
+		i sådana fall är alla gränser pekande mot roten
+
+	Binary tree
+		ett Rooted tree där alla noder har max två barn
+
+	Binary seach tree 
+		ett binary tree där alla noder har en jjämförbar nyckel
+		alla nycklar till vänster om en nod är mindre än föregående nod 
+		alla nycklar till höger om en nod är större än föregående nod
+		noderna längst ut kallas leaves
+
+Hasch table 
+	är en datastruktur som sparar element i en lista 
+	positionen av elementet beror på elementets nyckel 
+

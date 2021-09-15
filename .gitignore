@@ -1,5 +1,6 @@
-.pio
-.ccls
-.ccls-cache
-compile_commands.json
+**/.ccls
+**/.ccls-cache
+
+.DS_Store
+.vscode
 
