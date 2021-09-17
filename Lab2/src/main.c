@@ -16,7 +16,9 @@
  */ 
 #define BUFFER_SIZE 4
 
-void blackBoxTest1()
+//Adds an element to the buffer and then removes the element
+//test succeeds if the removed element is the same as the added element
+void testAddRemove()
 {
     struct circularBuffer buffer;
     int *buffer_data = (int*) malloc(BUFFER_SIZE * sizeof(int));
@@ -29,21 +31,13 @@ void blackBoxTest1()
 
     printBuffer(&buffer);
     free(buffer_data);
-//    if(added == removed)
-//    {
-//        printf("\n\n\n");
-//        printf("bb1 pass");
-//        printf("\n\n\n");
-//    }
-//    else{
-//        printf("\n\n\n");
-//        printf("bb1 failed");
-//        printf("\n\n\n");
-//    }
 
 }
 
-void blackBoxTest2()
+//adds 2 elements and then removes 2 elements
+//test succeeds if the two added elements are the same as the added elements 
+//and in the same order
+void testAddRemove2()
 {
    struct circularBuffer buffer;
    int *buffer_data = (int*) malloc(BUFFER_SIZE * sizeof(int));
@@ -61,11 +55,11 @@ void blackBoxTest2()
            valAdd1, valRem1, valAdd2, valRem2);
     printBuffer(&buffer);
     free(buffer_data);
-//   assert(valAdd1 == valRem1);
-//   assert(valAdd2 == valRem2);
 }
 
-void blackBoxTest3()
+//fills the buffer with data and then removes the data
+//test succeeds if the added data is the same and in the same order as the added data
+void testAddRemoveFull()
 {
     struct circularBuffer buffer;
     int *buffer_data = (int*) malloc(BUFFER_SIZE * sizeof(int));
@@ -78,7 +72,6 @@ void blackBoxTest3()
     for(int i = 0; i < BUFFER_SIZE; i++)
     {
         temp = removeHead(&buffer);
-//        assert(i == removeHead(buffer));
         TEST_ASSERT(i == temp, "test \t add element %d \n\t removed %d\n\t",
                 i, temp );
     }
@@ -86,7 +79,9 @@ void blackBoxTest3()
     free(buffer_data);
 }
 
-void blackBoxTest4()
+//attempts to add BUFFER_SIZE +1 elements to the buffer
+//test succeds if the last element added is discarded
+void testAddDiscardOnFull()
 {
     struct circularBuffer buffer;
     int *buffer_data = (int*) malloc(BUFFER_SIZE * sizeof(int));
@@ -99,20 +94,22 @@ void blackBoxTest4()
     temp = removeHead(&buffer);
     TEST_ASSERT(temp != BUFFER_SIZE, "test \t removed %d \n\t buffer size %d\n\t", 
             temp, BUFFER_SIZE);
-//    assert(removeHead(&buffer) == BUFFER_SIZE +1);
     printBuffer(&buffer);
     free(buffer_data);
 }
 
-void blackBoxTest5()
+//runs testAddRemove BUFFER_SIZE +1 times
+void testAddRemoveMultiple()
 {
     for(int i = 0; i < BUFFER_SIZE +1; i ++)
     {
-        TEST_RUN(blackBoxTest1);
+        TEST_RUN(testAddRemove);
     }
 }
 
-void blackBoxTest6()
+//tries to find data in an empty buffer
+//test succeeds if the contains() function returns INT_MIN
+void testContains()
 {
     struct circularBuffer buffer;
     int *buffer_data = (int*) malloc(BUFFER_SIZE * sizeof(int));
@@ -123,7 +120,9 @@ void blackBoxTest6()
     free(buffer_data);
 }
 
-void blackBoxTest7()
+//adds a value to the buffer and then tries to find it with contains
+//test succeeds if contains returns the value
+void testAddContains()
 {
     struct circularBuffer buffer;
     int *buffer_data = (int*) malloc(BUFFER_SIZE * sizeof(int));
@@ -141,7 +140,9 @@ void blackBoxTest7()
 
 }
 
-void blackBoxTest8()
+//adds two values to the buffer and the checks if the buffer contains the second value
+//test succeeds if the contains function returns the second value
+void testAddMultipleContains()
 {
     struct circularBuffer buffer;
     int *buffer_data = (int*) malloc(BUFFER_SIZE * sizeof(int));
@@ -161,7 +162,9 @@ void blackBoxTest8()
     free(buffer_data);
 }
 
-void blackBoxTest9()
+//fills the buffer with data and then checks if the buffer contains the last value added
+//the test succeeds if the contains function returns the last value added
+void testAddFullContains()
 {
     struct circularBuffer buffer;
     int *buffer_data = (int*) malloc(BUFFER_SIZE * sizeof(int));
@@ -177,10 +180,12 @@ void blackBoxTest9()
     printBuffer(&buffer);
     TEST_ASSERT(temp == ret, "test \t buffer contains %d \n\t", 
             temp);
-//    assert(removeHead(&buffer) == BUFFER_SIZE +1);
     free(buffer_data);
 }
 
+//initializes a new buffer and then checks if the buffer contains the proper values 
+//for maxLength, head, and tail
+//test succeeds if the buffer contains the proper values 
 void testInit()
 {
     struct circularBuffer buffer;
@@ -197,6 +202,7 @@ void testInit()
     free(buffer_data);
 }
 
+
 void testAdd()
 {
     struct circularBuffer buffer;
@@ -206,18 +212,21 @@ void testAdd()
     printf("white box test add");
     addElement(&buffer, 1);
 
-    TEST_ASSERT(buffer.head == 0 && buffer.tail == 0, "test add one element to empty buffer \t head :%d\n\t tail:%d \n\t",
+    TEST_ASSERT(buffer.head == 0 && buffer.tail == 0,
+            "test add one element to empty buffer\n\t expected head to be 0 \n\t expect tail to be 0 \t head :%d\n\t tail:%d \n\t",
             buffer.head, buffer.tail);
 
     initCircularBuffer(&buffer, buffer_data, BUFFER_SIZE, 0);
     addElement(&buffer, 1);
     removeHead(&buffer);
     addElement(&buffer,1);
-    TEST_ASSERT(buffer.head == 0 && buffer.tail == 0, "test \t head: %d \n\t tail: %d \n\t",
+    TEST_ASSERT(buffer.head == 0 && buffer.tail == 0, 
+            "test\n\t expect head to be 0\n\t expect tail to be 0\n\t head: %d \n\t tail: %d \n\t",
             buffer.head, buffer.tail);
 
     addElement(&buffer, 1);
-    TEST_ASSERT(buffer.head == 0 && buffer.tail == 1, "test at 2 elements \t head: %d \n\t tail: %d\n",
+    TEST_ASSERT(buffer.head == 0 && buffer.tail == 1,
+            "test at 2 elements\n\t expect head to be 0\n\t expect tail to be 1\n\t head: %d \n\t tail: %d\n",
             buffer.head, buffer.tail);
 
     initCircularBuffer(&buffer, buffer_data, BUFFER_SIZE, 0);
@@ -225,7 +234,8 @@ void testAdd()
     {
         addElement(&buffer, i);
     }
-    TEST_ASSERT(buffer.head == 0 && buffer.tail == 2, "test \t head: %d \n\t tail: %d\n",
+    TEST_ASSERT(buffer.head == 0 && buffer.tail == 2, 
+            "test\n\t expect head to be 0\n\t expect tail to be 2\n\t head: %d \n\t tail: %d\n",
             buffer.head, buffer.tail);
 
     free(buffer_data);
@@ -240,7 +250,8 @@ void testRemoveValue()
     addElement(&buffer, 1);
     int ret = removeValue(&buffer, 2);
 
-    TEST_ASSERT(buffer.head == 0&&buffer.tail == 0, "test \t head: %d \n\t tail: %d\n\t",
+    TEST_ASSERT(buffer.head == 0&&buffer.tail == 0,
+            "test expect head to be 0 \n\t expect tail to be 0\n\t head: %d \n\t tail: %d\n\t",
             buffer.head, buffer.tail);
 
     initCircularBuffer(&buffer, buffer_data, BUFFER_SIZE, 0);
@@ -250,13 +261,15 @@ void testRemoveValue()
     }
     removeValue(&buffer, 2);
 
-    TEST_ASSERT(buffer.head == 0 && buffer.tail == 2, "test \t head: %d \n\t tail: %d\n\t",
+    TEST_ASSERT(buffer.head == 0 && buffer.tail == 2, 
+            "test \n\t expect head to be 0\n\t expect tail to be 2\n\t head: %d \n\t tail: %d\n\t",
             buffer.head, buffer.tail);
 
     initCircularBuffer(&buffer, buffer_data, BUFFER_SIZE, 0);
     removeValue(&buffer,1);
 
-    TEST_ASSERT(buffer.head == 0 && buffer.tail == 0, "test \t head: %d \n\t tail: %d\n\t",
+    TEST_ASSERT(buffer.head == 0 && buffer.tail == 0, 
+            "test \n\t expect head to 0 \n\t expect tail to be 0 \t head: %d \n\t tail: %d\n\t",
             buffer.head, buffer.tail);
 
 
@@ -272,27 +285,31 @@ void testRemoveHead()
     addElement(&buffer, 1);
     removeHead(&buffer);
 
-    TEST_ASSERT(buffer.head == 0 && buffer.tail == 0, "test \t head: %d\n\t tail: %d\n\t",
+    TEST_ASSERT(buffer.head == 0 && buffer.tail == 0, 
+            "test \n\t expect head to be 0 \n\t expect tail to be 0\n\t head: %d\n\t tail: %d\n\t",
             buffer.head, buffer.tail);
     
     addElement(&buffer, 1);
     addElement(&buffer, 1);
     removeHead(&buffer);
 
-    TEST_ASSERT(buffer.head == 1 && buffer.tail == 1, "test \t  head: %d\n\t tail: %d\n\t",
+    TEST_ASSERT(buffer.head == 1 && buffer.tail == 1, 
+            "test \n\t expect head to be 1 \n\t expect tail to be 0\n\t head: %d\n\t tail: %d\n\t",
             buffer.head, buffer.tail);
 
     addElement(&buffer, 1);
     addElement(&buffer, 1);
     removeHead(&buffer);
 
-    TEST_ASSERT(buffer.head == 2 && buffer.tail == 3, "test \t  head: %d\n\t tail: %d\n\t",
+    TEST_ASSERT(buffer.head == 2 && buffer.tail == 3, 
+            "test \n\t expect head to be 2\n\t expect tail to be 0\n\t  head: %d\n\t tail: %d\n\t",
             buffer.head, buffer.tail);
 
     initCircularBuffer(&buffer, buffer_data, BUFFER_SIZE, 0);
     removeHead(&buffer);
 
-    TEST_ASSERT(buffer.head == 0 && buffer.tail == 0, "test \t  head: %d\n\t tail: %d\n\t",
+    TEST_ASSERT(buffer.head == 0 && buffer.tail == 0, 
+            "test \n\t expect head to be 0\n\t expect tail to be 0\n\t head: %d\n\t tail: %d\n\t",
             buffer.head, buffer.tail);
 
     free(buffer_data);
@@ -300,42 +317,21 @@ void testRemoveHead()
 
 void app_main() {
 
-    // Some code to help you get started
-    struct circularBuffer buffer;
-    int *buffer_data = (int*) malloc(BUFFER_SIZE * sizeof(int));
-    initCircularBuffer(&buffer, buffer_data, BUFFER_SIZE, 0);
+    //blackbox tests
+    TEST_RUN(testAddRemove);
+    TEST_RUN(testAddRemove2);
+    TEST_RUN(testAddRemoveFull);
+    TEST_RUN(testAddDiscardOnFull);
+    TEST_RUN(testAddRemoveMultiple);
+    TEST_RUN(testContains);
+    TEST_RUN(testAddContains);
+    TEST_RUN(testAddMultipleContains);
+    TEST_RUN(testAddFullContains);
 
-    TEST_RUN(blackBoxTest1);
-    TEST_RUN(blackBoxTest2);
-    TEST_RUN(blackBoxTest3);
-    TEST_RUN(blackBoxTest4);
-    TEST_RUN(blackBoxTest5);
-    TEST_RUN(blackBoxTest6);
-    TEST_RUN(blackBoxTest7);
-    TEST_RUN(blackBoxTest8);
-    TEST_RUN(blackBoxTest9);
-
+    //whitebox tests
     TEST_RUN(testInit);
     TEST_RUN(testAdd);
     TEST_RUN(testRemoveValue);
     TEST_RUN(testRemoveHead);
 
-//
-//
-//    printf("\n\n\n");
-//    printf("For example, output the results of your tests here.");
-//    
-//    printf("\n\n");   
-//
-//    printf("\nPerhaps with some delay...");
-//
-//    printf("\n\n\n");
-//
-//    ets_delay_us(2000000ul);
-//    printf("\nbetween your printouts!");
-//
-//
-//    printf("\n\n\n");
-
-    free(buffer_data);
 }
