@@ -1,10 +1,16 @@
-#include <stdio.h>
+
+/*
+*   Lab2: Circular buffers
+*   Authour: Eric Lundin
+*   Version: 1.0
+*   Date: 2021-09-15
+*/
+
 #include <limits.h>
 #include "circular_buffer.h"
 
-
-
-void initCircularBuffer(struct circularBuffer* bufferPtr, int* data, int maxLength, int length) {
+void initCircularBuffer(struct circularBuffer *bufferPtr, int *data, int maxLength, int length)
+{
     bufferPtr->data = data;
     bufferPtr->head = 0;
     bufferPtr->tail = 0;
@@ -12,17 +18,17 @@ void initCircularBuffer(struct circularBuffer* bufferPtr, int* data, int maxLeng
     bufferPtr->maxLength = maxLength;
 }
 
-//Steps through the buffer 
+//Steps through the buffer
 //returns value if the buffer contains value
-int contains(struct circularBuffer * bufferPtr, int value)
+int contains(struct circularBuffer *bufferPtr, int value)
 {
     int *dataPtr = bufferPtr->data;
     int maxLength = bufferPtr->maxLength;
     int head = bufferPtr->head;
 
-    for(int i = 0; i < bufferPtr->length; i++)
+    for (int i = 0; i < bufferPtr->length; i++)
     {
-        if(dataPtr[head] == value)
+        if (dataPtr[head] == value)
         {
             return value;
         }
@@ -36,19 +42,19 @@ int contains(struct circularBuffer * bufferPtr, int value)
 
 // adds Element at tail in the buffer with value value
 // if length == maxlength will discard value and return INT_MIN
-// returns value if succeeded 
+// returns value if succeeded
 // returns INT_MIN if value discarded
 int addElement(struct circularBuffer *bufferPtr, int value)
 {
-    if(bufferPtr->length == 0)
+    if (bufferPtr->length == 0)
     {
         bufferPtr->data[bufferPtr->tail] = value;
         bufferPtr->length++;
         return value;
     }
-    else if(bufferPtr->length < bufferPtr->maxLength)
+    else if (bufferPtr->length < bufferPtr->maxLength)
     {
-        bufferPtr->tail = (bufferPtr->tail +1) % bufferPtr->maxLength;
+        bufferPtr->tail = (bufferPtr->tail + 1) % bufferPtr->maxLength;
         bufferPtr->data[bufferPtr->tail] = value;
         bufferPtr->length++;
         return value;
@@ -59,8 +65,8 @@ int addElement(struct circularBuffer *bufferPtr, int value)
     }
 }
 
-//searches for a value, removes the value 
-//shrinks the buffer after removal 
+//searches for a value, removes the value
+//shrinks the buffer after removal
 //if value is not found returns INT_MIN
 int removeValue(struct circularBuffer *bufferPtr, int value)
 {
@@ -69,27 +75,27 @@ int removeValue(struct circularBuffer *bufferPtr, int value)
     int index = bufferPtr->head;
     int tail = bufferPtr->tail;
 
-    for(int i = 0; i < bufferPtr->length; i++)
+    for (int i = 0; i < bufferPtr->length; i++)
     {
-        if(dataPtr[index] == value)
+        if (dataPtr[index] == value)
         {
             do
             {
-                bufferPtr->data[index] = bufferPtr->data[(index + 1)%maxLength];
-                index = (index +1) % maxLength;
-            }while(index != tail);
-            
-            if(tail == 0)
+                bufferPtr->data[index] = bufferPtr->data[(index + 1) % maxLength];
+                index = (index + 1) % maxLength;
+            } while (index != tail);
+
+            if (tail == 0)
             {
-                bufferPtr->tail = maxLength -1;
+                bufferPtr->tail = maxLength - 1;
             }
             else
             {
-                bufferPtr->tail = tail -1;
+                bufferPtr->tail = tail - 1;
             }
             return value;
         }
-        index = (index +1) % maxLength;
+        index = (index + 1) % maxLength;
     }
 
     return INT_MIN;
@@ -97,19 +103,19 @@ int removeValue(struct circularBuffer *bufferPtr, int value)
 
 int removeHead(struct circularBuffer *bufferPtr)
 {
-    int value = bufferPtr->data[bufferPtr->head]; 
+    int value = bufferPtr->data[bufferPtr->head];
 
-    if(bufferPtr->length == 0)
+    if (bufferPtr->length == 0)
     {
         return INT_MIN;
     }
-    else if(bufferPtr->length < bufferPtr->maxLength)
+    else if (bufferPtr->length < bufferPtr->maxLength)
     {
-        if(bufferPtr->length > 1)
+        if (bufferPtr->length > 1)
         {
-            bufferPtr->head = (bufferPtr->head +1) % bufferPtr->maxLength;
+            bufferPtr->head = (bufferPtr->head + 1) % bufferPtr->maxLength;
         }
-        bufferPtr->length --;
+        bufferPtr->length--;
         return value;
     }
 
@@ -119,9 +125,9 @@ int removeHead(struct circularBuffer *bufferPtr)
 void printBuffer(struct circularBuffer *bufferPtr)
 {
     printf("\n");
-    for(int i = 0; i < bufferPtr->maxLength; i++)
+    for (int i = 0; i < bufferPtr->maxLength; i++)
     {
-        printf("|%d",bufferPtr->data[i]);
+        printf("|%d", bufferPtr->data[i]);
     }
     printf("\n");
 }
