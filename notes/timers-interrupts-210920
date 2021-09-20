@@ -1,0 +1,91 @@
+Callbacks
+in computer programming a callback is when a function is is passed as 
+a attribute to another function
+
+in C this is done with function pointers 
+
+the volatile keyword 
+  it tells the compiler to avoid certain optimisation 
+  volatile should be used for Global variables modified by an isr
+
+
+//*fun sghould be a function pointer that returns void and takes an int
+void wrapper (void (*fun)(int)){
+  fun(999)
+}
+
+interrupts within the ESP32 
+  71 peripheral interrupts 
+  each processor can handle 32 interrupts
+
+non shared interrupts 
+  non shared interuupts can either be edge or level triggered
+shared interrupts
+  can only be only level interrupts
+
+Expernal peripherals 
+  within the ESP32 but outside the xtensa cores 
+    both cpus are wired to an interrupt mux
+    asllcoating an external interrupt will always 
+
+
+Internal peripherals
+  timers and to software interrupts 
+
+Abstractions for GPIOs
+  esp_err_t  gpio_is_register(void(fn*)(void*), void *arg, int)
+
+
+Timers 
+  a timer is a simple counter measuring time by accumulating athe number 
+  of clock ticks in a counter register
+
+  operate independently form software execution
+  chips use a prescaler to scale down the nr of ticks since clocks are very fast
+
+  a compare register is used to generate an alert ehn the timer 
+  reaches a certain value, when the timer matches it may continue or reset
+
+  Typically involved registers
+    clock configure register
+    timer counter
+    Controll register
+    Prescale register
+    Compare register
+    Action register
+    Interrupt register
+
+  ESP32
+    two hardware timer groups 
+    two gp hardware timers 
+
+    PLL_CLK 320 or 480 MHz
+    RTC8M_D256_CLK
+    RTC_CLK
+    APLL_CLK
+
+  Programming timers 
+    first of all conf the timer with timer_init()
+    passa struct timer_config_t
+    divider
+    mode 
+    counter enable
+    alarm enable 
+    auto reload
+    interrupt type 
+
+    for "slow" timers use esp_timer
+
+time keeping 
+  ESP_IDF comes with some handy functions to keep track of time
+  based on a 150KHz oscillator 
+  
+Watchdog
+  is a dog that watches
+
+  can be fed within ISR0() or main
+  how to feed the watchdog 
+
+  interrupt watchdog timer
+  task watchdog timer
+
