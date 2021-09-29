@@ -22,7 +22,7 @@ int startSound(int freq)
         }
     }
 
-    return conf.freq;
+    return (freq/130)*130;
 }
 
 void stopSound()
