@@ -23,6 +23,7 @@ void callback(void *args)
         counter++;
     else if(lastSample > TRIGGER_LVL && sample < TRIGGER_LVL)
         counter++;
+    lastSample = sample;
 }
 
 void startSampling(int freq)
