@@ -5,10 +5,11 @@
 #include <esp32/rom/ets_sys.h>
 #include <esp_task_wdt.h>
 
-#include <pins.h>
-#include <SoundGen.h>
-#include <sampler.h>
-#include <random.h>
+#include "pins.h"
+#include "SoundGen.h"
+#include "sampler.h"
+#include "random.h"
+
 void blinkLED(int ms, int times)
 {
     for (int i = 0; i < times; i++)
@@ -35,17 +36,12 @@ void app_main()
         blinkLED(50,20);
 
         int randFq = getRandomRange(200, 700);
-        
         int actualFq = startSound(randFq);
 
         vTaskDelay(pdMS_TO_TICKS(3000));
-
         stopSound();
-
         startSampling(4000);
-
         vTaskDelay(pdMS_TO_TICKS(1000));
-
         stopSampling();
 
         float playerFq = getFreq();
@@ -63,6 +59,7 @@ void app_main()
             blinkLED(1000, 2);
         }
 
+        vTaskDelay(pdMS_TO_TICKS(3000));
     }
 }
 

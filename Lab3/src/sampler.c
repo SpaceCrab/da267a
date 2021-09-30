@@ -1,9 +1,9 @@
-#include <sampler.h>
-
 #include <driver/adc.h>
 #include <esp_timer.h>
 #include <driver/gpio.h>
 #include <soc/adc_channel.h>
+
+#include "sampler.h"
 
 #define TRIGGER_LVL 1050
 
@@ -13,11 +13,10 @@ uint32_t counter;
 uint64_t startTime;
 uint64_t stopTime;
 
+//callback method for the sftware timer
 void callback(void *args)
 {
-    //TODO count "crossings" of the averageand calculate frequency 
     uint32_t sample = adc1_get_raw(ADC1_CHANNEL_4);
-    //printf("%d\n", sample);
 
     if(lastSample < TRIGGER_LVL && sample > TRIGGER_LVL )
         counter++;
@@ -31,12 +30,12 @@ void startSampling(int freq)
     //init adc
     lastSample = 0;
     counter = 0;
-    adc_power_on();
+
     adc_gpio_init(ADC_UNIT_1, ADC_CHANNEL_4);
     adc1_config_width(ADC_WIDTH_12Bit);
     adc1_config_channel_atten(ADC1_CHANNEL_4,ADC_ATTEN_DB_11);
 
-    //init timer
+    //init the software timer
     esp_timer_create_args_t timerArgs = {
         .arg = NULL,
         .callback = callback,
@@ -46,13 +45,14 @@ void startSampling(int freq)
     };
 
     u_int64_t sampleFreq = (u_int64_t)(1000000. / ((double) freq));
-    esp_err_t err = esp_timer_create(&timerArgs,&timerHandle);
+    ESP_ERROR_CHECK(esp_timer_create(&timerArgs,&timerHandle));
 
     //start timer
-    err = esp_timer_start_periodic(timerHandle, sampleFreq);
+    ESP_ERROR_CHECK(esp_timer_start_periodic(timerHandle, sampleFreq));
     startTime = esp_timer_get_time();
 }
 
+//stops the software timer
 void stopSampling()
 {
     esp_timer_stop(timerHandle);

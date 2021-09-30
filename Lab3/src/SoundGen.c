@@ -27,5 +27,5 @@ int startSound(int freq)
 
 void stopSound()
 {
-    esp_err_t err = dac_cw_generator_disable();
+    ESP_ERROR_CHECK(dac_cw_generator_disable());
 }
