@@ -3,12 +3,20 @@
 
 #define BUTTON_PIN 12
 #define ESP_INTR_FLAG_DEFAULT 0
+#define PUSH_TIME_US 100000
 
 static volatile int counter = 0;
+static volatile uint64_t lastPush = -PUSH_TIME_US;
 
 static void ISR_handler(void *arg)
 {
-    counter ++;
+    uint64_t now = esp_timer_get_time();
+
+    if((now -lastPush) > PUSH_TIME_US)
+    {
+        lastPush = now;
+        counter ++;
+    }
 }
 
 static void waitMs(unsigned int millis)
@@ -51,7 +59,7 @@ void app_main()
     {
         printf("counter is %d\n", counter);
         printf("busy waiting .......");
-        waitMs(1000);
+        waitMs(100);
         printf("done waiting\n");
     }
 

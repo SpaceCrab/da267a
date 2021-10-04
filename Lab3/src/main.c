@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <driver/adc.h>
-#include <esp32/rom/ets_sys.h>
-#include <esp_task_wdt.h>
+#include "driver/adc.h"
+#include "esp32/rom/ets_sys.h"
+#include "esp_task_wdt.h"
 
 #include "pins.h"
 #include "SoundGen.h"

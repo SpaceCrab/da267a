@@ -3,10 +3,9 @@
 
 #define LED_A  13
 
+//initializes the pin LED_A
 void initPins()
 {
-
-	//Initializing the pins 12 and 14 for the LEDs
 	gpio_config_t config;
 	config.pin_bit_mask = (u_int64_t)1 << LED_A;
 	config.mode = GPIO_MODE_OUTPUT;
