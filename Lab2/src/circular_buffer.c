@@ -5,7 +5,7 @@
 *   Version: 1.0
 *   Date: 2021-09-15
 */
-
+#include <stdio.h>
 #include <limits.h>
 #include "circular_buffer.h"
 
@@ -110,17 +110,12 @@ int removeHead(struct circularBuffer *bufferPtr)
     {
         return INT_MIN;
     }
-    else if (bufferPtr->length < bufferPtr->maxLength)
-    {
-        if (bufferPtr->length > 1)
-        {
-            bufferPtr->head = (bufferPtr->head + 1) % bufferPtr->maxLength;
-        }
-        bufferPtr->length--;
+    bufferPtr->length--;
+    if(bufferPtr->length == 0) 
         return value;
-    }
+    bufferPtr->head = (bufferPtr->head + 1) % bufferPtr->maxLength;
+    return value;
 
-    return INT_MIN;
 }
 
 //prints the buffer
