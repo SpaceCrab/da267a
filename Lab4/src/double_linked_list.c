@@ -6,7 +6,9 @@
 
 
 int addDLL(struct doubleLinkedList* list, int value){
-  return INT_MIN;
+    struct doubleLinkedListElement element;
+    malloc(sizeof(element));
+    return INT_MIN;
 } 
 
 

@@ -29,7 +29,7 @@
 //TODO blackbox Test SLL init
 void testSLLInit()
 {
-    struct singleLinkedList list;
+    struct sll list;
     initSLL(&list);
 
     int ret = removeFirstSLL(&list);
@@ -40,7 +40,7 @@ void testSLLInit()
 void testSLLAdd()
 {
     int val = 1;
-    struct singleLinkedList list;
+    struct sll list;
     initSLL(&list);
 
     int ret = addSLL(&list, val);
@@ -52,7 +52,7 @@ void testSLLAdd()
 void testRemoveLast()
 {
     int val = 1;
-    struct singleLinkedList list;
+    struct sll list;
     initSLL(&list);
     addSLL(&list, val);
     addSLL(&list, val);
@@ -64,7 +64,7 @@ void testRemoveLast()
 void testRemoveFirst()
 {
     int val = 1;
-    struct singleLinkedList list;
+    struct sll list;
     initSLL(&list);
     addSLL(&list, val);
     addSLL(&list, val);
@@ -128,7 +128,8 @@ void testRemoveFirstDLL()
 //TODO 
 
 void app_main() {
-
-
+    struct sll *list;
+    initSLL(list);
+    printf("init\n");
 
 }

@@ -3,13 +3,13 @@
 
 
 
-struct singleLinkedListElement{
+struct sll_element{
     int data;
-    struct singleLinkedListElement *next;
+    struct sll_element *next;
 };
 
-struct singleLinkedList{
-    struct singleLinkedListElement *first;
+struct sll{
+    struct sll_element *first;
 };
 
 
@@ -31,14 +31,14 @@ struct singleLinkedList{
  *   'value' - If a new element with value 'value' successfully added to the list.
  *   INT_MIN (defined in limits.h) - If a new element could not be added to the list.
  */
-int addSLL(struct singleLinkedList* list, int value);
+int addSLL(struct sll* list, int value);
 
 
 /* 
  * This function should initialize the linked list structure that is given as
  * argument to the function, that is setting list->first to NULL
  */
-void initSLL(struct singleLinkedList* list);
+void initSLL(struct sll* list);
 
 
 /* 
@@ -50,7 +50,7 @@ void initSLL(struct singleLinkedList* list);
  *  list->first->data if the element was successfully removed.
  *  INT_MIN (defined in limits.h) - If no element could be removed (i.e. the list->first == NULL).
  */
-int removeFirstSLL(struct singleLinkedList* list);
+int removeFirstSLL(struct sll* list);
 
 
 
@@ -63,9 +63,9 @@ int removeFirstSLL(struct singleLinkedList* list);
  *  list->first->data if the element was successfully removed.
  *  INT_MIN (defined in limits.h) - If no element could be removed (i.e. the list->first == NULL).
  */
-int removeLastSLL(struct singleLinkedList* list);
+int removeLastSLL(struct sll* list);
 
-void cleanSll(struct singleLinkedList* list);
+void cleanSll(struct sll* list);
 
 
 #endif
