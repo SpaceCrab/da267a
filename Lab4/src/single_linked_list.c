@@ -1,9 +1,8 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include<limits.h>
+
 #include"single_linked_list.h"
-
-
 
 int addSLL(struct sll* list, int value){
     struct sll_element *element =
@@ -32,9 +31,13 @@ int addSLL(struct sll* list, int value){
         prev = list->first;
         element->next = list->first;
         //finds the position to insert element
+        //and inserts it
+        //if the element is larger than the largest element 
+        //insert it at the end
         while(next != NULL)
         {
-            if(prev->data < element->data && next->data > element->data){
+            //if the element is between 
+            if(prev->data <= element->data && next->data > element->data){
                 prev->next = element;
                 element->next = next;
                 return element->data;
@@ -42,8 +45,6 @@ int addSLL(struct sll* list, int value){
             prev = next;
             next = next->next;
         }
-        //if the element is larger than the largest element 
-        //insert it at the end
         prev->next = element;
         return element->data;
      }
@@ -56,13 +57,41 @@ void initSLL(struct sll* list) {
 }
 
 int removeFirstSLL(struct sll* list){
+    if(list->first != NULL)
+    {
+        if(list->first->next != NULL)
+        {
+            list->first = list->first->next;
+            free(list->first->next);
+            return list->first->data;
+        }
+        list->first->data = 0;
+        return list->first->data;
+    }
     return INT_MIN;
 } 
 
 int removeLastSLL(struct sll* list){
-    return INT_MIN;
+    struct sll_element *next = list->first;
+    struct sll_element *prev = list->first;
+
+    while(next->next != NULL)
+    {
+        prev = next;
+        next = next->next;
+    }
+
+    free(next);
+    return prev->data;
 } 
 
 void cleanSLL(struct sll* list){
-    
+    struct sll_element *next = list->first;
+    struct sll_element *prev = list->first;
+    while(next != NULL)
+    {
+        prev = next;
+        next = next->next;
+        free(prev);
+    }
 }

@@ -128,8 +128,12 @@ void testRemoveFirstDLL()
 //TODO 
 
 void app_main() {
-    struct sll *list;
-    initSLL(list);
     printf("init\n");
+
+    TEST_RUN(testSLLInit);
+    TEST_RUN(testSLLAdd);
+    printf("test SLLAdd done\n");
+    TEST_RUN(testRemoveLast);
+    TEST_RUN(testRemoveFirst);
 
 }
