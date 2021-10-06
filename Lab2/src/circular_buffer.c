@@ -100,7 +100,8 @@ int removeValue(struct circularBuffer *bufferPtr, int value)
 
     return INT_MIN;
 }
-
+//removes the datapoint at the head position
+//shrinks the buffer by moving head
 int removeHead(struct circularBuffer *bufferPtr)
 {
     int value = bufferPtr->data[bufferPtr->head];
@@ -122,6 +123,7 @@ int removeHead(struct circularBuffer *bufferPtr)
     return INT_MIN;
 }
 
+//prints the buffer
 void printBuffer(struct circularBuffer *bufferPtr)
 {
     printf("\n");
