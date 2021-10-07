@@ -10,8 +10,8 @@ int addSLL(struct sll* list, int value){
     element->next = NULL;
     element->data = value;
 
-    struct sll_element *next;
-    struct sll_element *prev;
+    struct sll_element *next = list->first;;
+    struct sll_element *prev = list->first;;
     
     //if the list is empty set first to the added element
     if(list->first == NULL )
@@ -23,12 +23,12 @@ int addSLL(struct sll* list, int value){
     {
         //checks if element should be inserted into the first position
         if(list->first->data > value)
-        {   element->next = list->first->next;
+        {
+            element->next = list->first->next;
             list->first = element;
             return value;
         }
-        next = list->first;
-        prev = list->first;
+
         element->next = list->first;
         //finds the position to insert element
         //and inserts it
@@ -36,7 +36,7 @@ int addSLL(struct sll* list, int value){
         //insert it at the end
         while(next != NULL)
         {
-            //if the element is between 
+            //if the element fits between prev and next
             if(prev->data <= element->data && next->data > element->data){
                 prev->next = element;
                 element->next = next;
@@ -72,6 +72,8 @@ int removeFirstSLL(struct sll* list){
 } 
 
 int removeLastSLL(struct sll* list){
+    if(list->first == NULL) return INT_MIN;
+
     struct sll_element *next = list->first;
     struct sll_element *prev = list->first;
 
@@ -80,9 +82,10 @@ int removeLastSLL(struct sll* list){
         prev = next;
         next = next->next;
     }
-
+    if(next == list->first) list->first = NULL;
+    if(prev != NULL) prev->next = NULL;
     free(next);
-    return prev->data;
+    return list->first->data;
 } 
 
 void cleanSLL(struct sll* list){
