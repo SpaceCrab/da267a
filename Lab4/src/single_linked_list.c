@@ -29,7 +29,6 @@ int addSLL(struct sll* list, int value){
             return value;
         }
 
-        element->next = list->first;
         //finds the position to insert element
         //and inserts it
         //if the element is larger than the largest element 

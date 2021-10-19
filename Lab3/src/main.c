@@ -38,15 +38,15 @@ void app_main()
         int randFq = getRandomRange(200, 700);
         int actualFq = startSound(randFq);
 
-        vTaskDelay(pdMS_TO_TICKS(3000));
+        vTaskDelay(pdMS_TO_TICKS(4000));
         stopSound();
-        startSampling(4000);
+        startSampling(2000);
         vTaskDelay(pdMS_TO_TICKS(1000));
         stopSampling();
 
         float playerFq = getFreq();
 
-        printf("player fq = %.2f target fq = %d\n", playerFq, actualFq);
+        printf("player fq = %.2f\n target fq = %d\n", playerFq, actualFq);
 
         if(absval(playerFq - (float)actualFq) < 50)
         {
