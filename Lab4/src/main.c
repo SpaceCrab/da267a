@@ -135,5 +135,10 @@ void app_main() {
     printf("test SLLAdd done\n");
     TEST_RUN(testRemoveLast);
     TEST_RUN(testRemoveFirst);
-
+    printf("test remove done!\n");
+    TEST_RUN(testDLLInit);
+    TEST_RUN(testDLLAdd);
+    TEST_RUN(testRemoveLastDLL);
+    TEST_RUN(testRemoveFirstDLL);
+    printf("all tests done!!");
 }

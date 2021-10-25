@@ -1,15 +1,15 @@
 #ifndef DOUBLE_LINKED_LIST_H
 #define DOUBLE_LINKED_LIST_H
 
-struct doubleLinkedListElement{
+struct dllElement{
     int data;
-    struct doubleLinkedListElement *next;
-    struct doubleLinkedListElement *previous;
+    struct dllElement *next;
+    struct dllElement *previous;
 };
 
 struct doubleLinkedList{
-    struct doubleLinkedListElement *first;
-    struct doubleLinkedListElement *last;
+    struct dllElement *first;
+    struct dllElement *last;
 };
 
 
@@ -67,6 +67,7 @@ int removeFirstDLL(struct doubleLinkedList* list);
  *  INT_MIN (defined in limits.h) - If no element could be removed (i.e. the list->first == NULL).
  */
 int removeLastDLL(struct doubleLinkedList* list);
+
 
 
 

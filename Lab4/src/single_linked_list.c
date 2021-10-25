@@ -56,18 +56,12 @@ void initSLL(struct sll* list) {
 }
 
 int removeFirstSLL(struct sll* list){
-    if(list->first != NULL)
-    {
-        if(list->first->next != NULL)
-        {
-            list->first = list->first->next;
-            free(list->first->next);
-            return list->first->data;
-        }
-        list->first->data = 0;
-        return list->first->data;
-    }
-    return INT_MIN;
+    if(list->first == NULL) return INT_MIN;
+    int data = list->first->data;
+    struct sll_element *element = list->first->next;
+    free(list->first);
+    list->first = element;
+    return data;
 } 
 
 int removeLastSLL(struct sll* list){
