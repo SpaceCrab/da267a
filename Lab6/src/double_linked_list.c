@@ -64,13 +64,13 @@ int removeFirstDLL(struct doubleLinkedList* list){
     else
     {
         int data = list->first->data;
-        struct dllElement *first = list->first;
-        if(list->first->next != NULL)
+        struct dllElement *tobefreed = list->first;
+        list->first = tobefreed->next;
+        if(list->first != NULL)
         {
-            list->first = list->first->next;
             list->first->previous = NULL;
         }
-        free(first);
+        free(tobefreed);
         return data; 
     }
 } 

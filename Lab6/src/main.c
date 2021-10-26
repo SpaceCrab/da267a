@@ -3,14 +3,16 @@
 #include <esp32/rom/ets_sys.h>
 #include <esp_task_wdt.h>
 #include "driver/gpio.h"
+#include "double_linked_list.h"
 
+#define DATA_SIZE 50
 #define LED_PIN_LEVEL_UP 27
 #define LED_PIN_LEVEL_MIDDLE 15
 #define LED_PIN_LEVEL_DOWN 32 
 #define BUTTON_PIN 12
 #define ESP_INTR_FLAG_DEFAULT 0
 
-#define PUSH_TIME_US 250000 // 250 ms
+#define PUSH_TIME_US 90000 // 250 ms
 
 // Used to represent a travel need of a passenger.
 struct travel_need {
@@ -18,38 +20,18 @@ struct travel_need {
     int destination;
 };
 
+struct doubleLinkedList list;
+
 // Used to not allow button pushes that are too close to each other in time
 static volatile uint64_t lastPush = -PUSH_TIME_US;
 
-//Just a counter keeping track of which travel need is next to process.
 static volatile int travel_need_counter = 0;
-
 // This data structure holds information about 
-static volatile struct travel_need travel_needs[50];
+static volatile struct travel_need travel_needs[DATA_SIZE];
 
-// This function is called when button is pushed
-static void handle_push(void *arg) {
-
-    // Disable interrupts
-    gpio_intr_disable(BUTTON_PIN);
-
-    // Get the current time 
-    uint64_t now = esp_timer_get_time();
-
-
-    // If enough time passed, we should consider this event as a genuine push
-    if ((now - lastPush) > PUSH_TIME_US) {
-       
-        lastPush = now;
-
-        //Get next travel need from list and do something with it
-        struct travel_need current_travel_need = travel_needs[travel_need_counter];
-
-
-        //Now we are just blinking the LEDs. You need to update this code.
-        uint32_t level = travel_need_counter % 4;
-
-        if (level == 0) {
+void indicateLevel(int level)
+{
+    if (level == 0) {
             gpio_set_level(LED_PIN_LEVEL_UP, 1);
             gpio_set_level(LED_PIN_LEVEL_MIDDLE, 0);
             gpio_set_level(LED_PIN_LEVEL_DOWN, 0); 
@@ -67,8 +49,28 @@ static void handle_push(void *arg) {
             gpio_set_level(LED_PIN_LEVEL_DOWN, 1); 
         }
 
+}
+
+// This function is called when button is pushed
+static void handle_push(void *arg) {
+
+    // Disable interrupts
+    gpio_intr_disable(BUTTON_PIN);
+
+    // Get the current time 
+    uint64_t now = esp_timer_get_time();
+
+
+    // If enough time passed, we should consider this event as a genuine push
+    if ((now - lastPush) > PUSH_TIME_US) {
+       
+        lastPush = now;
+
+
+        addDLL(&list, travel_need_counter);
+
         //Increase travel need counter
-        travel_need_counter++;
+        travel_need_counter = (travel_need_counter + 1)% DATA_SIZE;
 
     } // else ignore
 
@@ -133,6 +135,7 @@ void app_main() {
     travel_needs[49].origin = 1; travel_needs[49].destination = 0;
 
 
+    initDLL(&list);
 
     gpio_config_t config; 
 
@@ -154,9 +157,23 @@ void app_main() {
     ESP_ERROR_CHECK(gpio_config(&config));
     ESP_ERROR_CHECK(gpio_install_isr_service(ESP_INTR_FLAG_DEFAULT));
     ESP_ERROR_CHECK(gpio_isr_handler_add(BUTTON_PIN, handle_push, NULL));
-
+    
+    int level;
+    int index;
+    printf(" main loop start \n");
     // This is where you most likely put your main elevator code. 
     while(1) {
-        vTaskDelay(pdMS_TO_TICKS(250));
+        vTaskDelay(pdMS_TO_TICKS(2000));
+        index = removeFirstDLL(&list);
+        if(index != INT_MIN)
+        {
+            level = travel_needs[index].origin;
+            indicateLevel(level);
+
+            vTaskDelay(pdMS_TO_TICKS(2000));
+            level = travel_needs[index].destination;
+            indicateLevel(level);
+        }
+        printf("current index %d \n", index);
     }
 }
