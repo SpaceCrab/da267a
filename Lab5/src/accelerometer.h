@@ -8,6 +8,6 @@ void accelInit();
 
 void i2cWrite();
 
-void i2cRead();
+float i2cRead();
 
 #endif
