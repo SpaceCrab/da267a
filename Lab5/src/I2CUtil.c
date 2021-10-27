@@ -1,53 +1,49 @@
-#include <stdint.h>
-#include <driver/i2c.h>
-#include "i2cUtility.h"
-
-#define TIMEOUT_MS 1000
-#define RATE 1000
-/*
- * Initialises I2C bus, uses controller 0
+/**
+ * @file   I2CUtil.c
+ * @author Pratchaya Khansomboon (pratchaya.k.git@gmail.com)
+ * @brief  I2C implementation
+ * @date   2021-10-12
+ *
+ * @copyright Copyright (c) 2021
  */
-void initI2C(int sdapin, int sclpin)
-{
+#include "I2CUtil.h"
+#include "driver/i2c.h"
+
+#define RATE 1000  // ms
+
+void I2C_Init(int32_t sda, int32_t scl) {
 	i2c_config_t config = {
 		.mode             = I2C_MODE_MASTER,
-		.sda_io_num       = sdapin,
-		.scl_io_num       = sclpin,
+		.sda_io_num       = sda,
+		.scl_io_num       = scl,
 		.sda_pullup_en    = GPIO_PULLUP_ENABLE,
 		.scl_pullup_en    = GPIO_PULLUP_ENABLE,
-		.master.clk_speed = 100000              
+		.master.clk_speed = 100000               // Hz
 	};
 	ESP_ERROR_CHECK(i2c_param_config(I2C_NUM_0, &config));
 	ESP_ERROR_CHECK(i2c_driver_install(I2C_NUM_0, config.mode, 0, 0, 0));
 }
 
-/*
- * Writes one byte into a register
- */
-void writeI2C(uint8_t adress, uint8_t reg, uint8_t data)
-{
-    i2c_cmd_handle_t cmd = i2c_cmd_link_create();
-    esp_err_t res = i2c_master_start(cmd);
-    ESP_ERROR_CHECK(res);
-    //set adress + write and check for ack 
-    res = i2c_master_write_byte(cmd, adress << 1 | I2C_MASTER_WRITE,1);
-    ESP_ERROR_CHECK(res);
+void I2C_Write(uint8_t address, uint8_t reg, uint8_t data) {
+	i2c_cmd_handle_t cmd = i2c_cmd_link_create();
 
-    res = i2c_master_write_byte(cmd, reg,1);
-    ESP_ERROR_CHECK(res);
+	esp_err_t err = i2c_master_start(cmd);      // Start command
+	ESP_ERROR_CHECK(err);
+	err = i2c_master_write_byte(cmd, (address << 1) | I2C_MASTER_WRITE, 1);
+	ESP_ERROR_CHECK(err);
+	err = i2c_master_write_byte(cmd, reg, 1);   // Write to register
+	ESP_ERROR_CHECK(err);
+	err = i2c_master_write_byte(cmd, data, 1);  // Write data
+	ESP_ERROR_CHECK(err);
+	err = i2c_master_stop(cmd);                 // End command
+	ESP_ERROR_CHECK(err);
 
-    res = i2c_master_write_byte(cmd, data,1);
-    ESP_ERROR_CHECK(res);
-
-    res = i2c_master_cmd_begin(I2C_NUM_0, cmd, TIMEOUT_MS/portTICK_RATE_MS);
-    i2c_cmd_link_delete(cmd);
+	err = i2c_master_cmd_begin(I2C_NUM_0, cmd, RATE / portTICK_RATE_MS);
+	ESP_ERROR_CHECK(err);
+	i2c_cmd_link_delete(cmd);
 }
 
-/*
- * Reads len bytes and places them into a buffer, buffer must be pre  allocated
- */
-void readI2C(uint8_t address, uint8_t reg, uint8_t *buffer, int len)
-{
+void I2C_Read(uint8_t address, uint8_t reg, uint8_t* buffer, int32_t len) {
 	i2c_cmd_handle_t cmd = i2c_cmd_link_create();
 	esp_err_t err = i2c_master_start(cmd);
 	ESP_ERROR_CHECK(err);
@@ -73,5 +69,5 @@ void readI2C(uint8_t address, uint8_t reg, uint8_t *buffer, int len)
 	err = i2c_master_cmd_begin(I2C_NUM_0, cmd, RATE / portTICK_RATE_MS);
 	ESP_ERROR_CHECK(err);
 	i2c_cmd_link_delete(cmd);
-
 }
+

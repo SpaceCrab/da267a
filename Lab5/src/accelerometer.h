@@ -6,8 +6,12 @@
 
 void accelInit();
 
-void i2cWrite();
+void accelWrite();
 
-float i2cRead();
+int16_t accelReadX();
+
+int16_t accelReadY();
+
+int16_t accelReadZ();
 
 #endif
