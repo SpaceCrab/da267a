@@ -12,7 +12,7 @@
 #define BUTTON_PIN 12
 #define ESP_INTR_FLAG_DEFAULT 0
 
-#define PUSH_TIME_US 90000 // 250 ms
+#define PUSH_TIME_US 250000 // 250 ms
 
 // Used to represent a travel need of a passenger.
 struct travel_need {
@@ -37,16 +37,21 @@ void indicateLevel(int level)
             gpio_set_level(LED_PIN_LEVEL_DOWN, 0); 
         } 
 
-        else if (level == 1 || level == 3) {
+        else if (level == 1) {
             gpio_set_level(LED_PIN_LEVEL_UP, 0);
             gpio_set_level(LED_PIN_LEVEL_MIDDLE, 1);
             gpio_set_level(LED_PIN_LEVEL_DOWN, 0);
         }
         
-        else {
+        else if(level == 2) {
             gpio_set_level(LED_PIN_LEVEL_UP, 0);
             gpio_set_level(LED_PIN_LEVEL_MIDDLE, 0);
             gpio_set_level(LED_PIN_LEVEL_DOWN, 1); 
+        }
+        else {
+            gpio_set_level(LED_PIN_LEVEL_UP, 0);
+            gpio_set_level(LED_PIN_LEVEL_MIDDLE, 0);
+            gpio_set_level(LED_PIN_LEVEL_DOWN, 0);
         }
 
 }
@@ -158,22 +163,40 @@ void app_main() {
     ESP_ERROR_CHECK(gpio_install_isr_service(ESP_INTR_FLAG_DEFAULT));
     ESP_ERROR_CHECK(gpio_isr_handler_add(BUTTON_PIN, handle_push, NULL));
     
-    int level;
-    int index;
+    int previous = INT_MAX;
+    int level = 0;
+    int index = 0;
     printf(" main loop start \n");
-    // This is where you most likely put your main elevator code. 
     while(1) {
-        vTaskDelay(pdMS_TO_TICKS(2000));
         index = removeFirstDLL(&list);
+        printf("current index %d \n", index);
         if(index != INT_MIN)
         {
             level = travel_needs[index].origin;
+            //if there is travel time wait for travel time and turn light off
+            if(level != previous && previous)
+            {
+                indicateLevel(4);
+                vTaskDelay(pdMS_TO_TICKS(1000));
+                printf("traveling to new origin\n");
+            }
+            //indicate origin level
+            printf("indicating origin %d\n", level);
             indicateLevel(level);
+            vTaskDelay(pdMS_TO_TICKS(1000));
 
-            vTaskDelay(pdMS_TO_TICKS(2000));
+            //travel time  
+            printf("traveling\n");
+            indicateLevel(4);
+            vTaskDelay(pdMS_TO_TICKS(1000));
+
+            //indicate destination level
             level = travel_needs[index].destination;
+            previous = level;
+            printf("indicating destination %d\n", level);
             indicateLevel(level);
+            vTaskDelay(pdMS_TO_TICKS(1000));
         }
-        printf("current index %d \n", index);
+        vTaskDelay(pdMS_TO_TICKS(250));
     }
 }
