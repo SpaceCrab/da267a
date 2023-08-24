@@ -39,7 +39,7 @@ void writeI2C(uint8_t adress, uint8_t reg, uint8_t data)
     res = i2c_master_write_byte(cmd, data,1);
     ESP_ERROR_CHECK(res);
 
-    res = i2c_master_cmd_begin(I2C_NUM_0, cmd, TIMEOUT_MS/portTICK_RATE_MS);
+    res = i2c_master_cmd_begin(I2C_NUM_0, cmd, TIMEOUT_MS/portTICK_PERIOD_MS);
     i2c_cmd_link_delete(cmd);
 }
 
@@ -57,7 +57,7 @@ void readI2C(uint8_t address, uint8_t reg, uint8_t *buffer, int len)
 	ESP_ERROR_CHECK(err);
 	err = i2c_master_stop(cmd);
 	ESP_ERROR_CHECK(err);
-	err = i2c_master_cmd_begin(I2C_NUM_0, cmd, RATE / portTICK_RATE_MS);
+	err = i2c_master_cmd_begin(I2C_NUM_0, cmd, RATE / portTICK_PERIOD_MS);
 	ESP_ERROR_CHECK(err);
 	i2c_cmd_link_delete(cmd);
 
@@ -70,7 +70,7 @@ void readI2C(uint8_t address, uint8_t reg, uint8_t *buffer, int len)
 	ESP_ERROR_CHECK(err);
 	err = i2c_master_stop(cmd);
 	ESP_ERROR_CHECK(err);
-	err = i2c_master_cmd_begin(I2C_NUM_0, cmd, RATE / portTICK_RATE_MS);
+	err = i2c_master_cmd_begin(I2C_NUM_0, cmd, RATE / portTICK_PERIOD_MS);
 	ESP_ERROR_CHECK(err);
 	i2c_cmd_link_delete(cmd);
 

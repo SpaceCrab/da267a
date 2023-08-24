@@ -8,21 +8,20 @@
 #include "freertos/semphr.h"
 
 #include "i2cUtility.h"
-#include "I2CUtil.h"
 #include "accelerometer.h"
 #include "circular_buffer.h"
 
-//sampling fq 10hz chosen because the fq of running is 3hz and he nyquist fq is 6hz
+//sampling fq 10hz chosen because the fq of running is 3hz and the nyquist fq is 6hz
 //10 was just a nice number 
 
 #define COUNTING_PRIORITY 10
 #define SAMPLING_PRIORITY 20
-#define SAMPLING_PERIOD 100
-#define COUNTING_PERIOD 500
+#define SAMPLING_PERIOD 166
+#define COUNTING_PERIOD 1000
 #define BUFF_SIZE 30
 #define MININUM_SD 10
 #define MIN_INTR_STEP_TIME 250
-#define K 1.5
+#define K 1.8
 
 struct circularBuffer buff;
 int steps = 0;

@@ -1,7 +1,6 @@
 #include <stdint.h>
 #include <driver/i2c.h>
 #include "i2cUtility.h"
-#include "I2CUtil.h"
 #include "accelerometer.h"
 
 #define MPU6050_PWR_MGMT_1   0x6B  // Power Management 1
@@ -33,8 +32,8 @@
 
 #define MPU6050_WHO_AM_I     0x75 
 #define MPU6050_ADDR         0x68
-#define SCL_PIN              32
-#define SDA_PIN              33
+#define SCL_PIN              22
+#define SDA_PIN              21
 
 void accelInit()
 {
@@ -43,7 +42,7 @@ void accelInit()
    //
    //Setting power Management to 1
    printf("about to write to MPU\n");
-   writeI2C(MPU6050_ADDR, MPU6050_PWR_MGMT_1, 1);
+   writeI2C(MPU6050_ADDR, MPU6050_PWR_MGMT_1, 0);
    printf("about to write to MPU2\n");
    //configures the accelerometer
    writeI2C(MPU6050_ADDR, MPU6050_ACCEL_CONFIG, 1);
