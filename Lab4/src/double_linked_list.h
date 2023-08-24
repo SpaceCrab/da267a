@@ -68,8 +68,10 @@ int removeFirstDLL(struct doubleLinkedList* list);
  */
 int removeLastDLL(struct doubleLinkedList* list);
 
-
-
+/*
+ * This function removes the entire linked list sent too it and frees the memory
+ */
+void cleanDll(struct doubleLinkedList* list);
 
 
 #endif

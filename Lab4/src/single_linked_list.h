@@ -35,7 +35,7 @@ int addSLL(struct sll* list, int value);
 
 
 /* 
- * This function should initialize the linked list structure that is given as
+ * This function should initialize the linked lis:t structure that is given as
  * argument to the function, that is setting list->first to NULL
  */
 void initSLL(struct sll* list);

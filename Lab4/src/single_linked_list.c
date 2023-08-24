@@ -81,7 +81,7 @@ int removeLastSLL(struct sll* list){
     return list->first->data;
 } 
 
-void cleanSLL(struct sll* list){
+void cleanSll(struct sll* list){
     struct sll_element *next = list->first;
     struct sll_element *prev = list->first;
     while(next != NULL)

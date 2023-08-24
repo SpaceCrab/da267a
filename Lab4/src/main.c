@@ -119,13 +119,97 @@ void testRemoveFirstDLL()
     TEST_ASSERT(ret == val," test remove first DLL returned %d\n",ret);
 }
 //TODO whitebox Test SLL init
+void testSLLInitWhite()
+{
+    struct sll list;
+    initSLL(&list);
+
+    TEST_ASSERT (list.first == NULL, "SLL list struct first is NULL \n");
+}
+
 //TODO whitebox Test SLL add
-//TODO whitebox Test SLL remove
-//
+void testSLLAddWhite()
+{
+    int data[] = {1,2,3,4};
+    struct sll list;
+    initSLL(&list);
+    
+    int ret = addSLL(&list, 1);
+    ret = addSLL(&list, 2);
+    ret = addSLL(&list, 3);
+    ret = addSLL(&list, 4);
+
+    struct sll_element* element = list.first;
+    int i = 0;
+    while(element != NULL){
+        int val = data[i++];
+        TEST_ASSERT ( element->data == val, "expected %d to be %d", element->data, val);
+        element = element->next;
+    }
+    cleanSll(&list);
+}
+//TODO whitebox Test SLL remove 
+void testSLLRemoveFirst()
+{
+    struct sll list;
+    initSLL(&list);
+
+    int ret = addSLL(&list, 1);
+
+    ret = removeFirstSLL(&list);
+    TEST_ASSERT(ret == 1, "expected %d to be 1 \n", ret);
+
+    ret = removeFirstSLL(&list);
+    TEST_ASSERT(ret == INT_MIN, "expected %d to be %d \n", ret, INT_MIN);
+    
+    cleanSll(&list);
+}
+
+void testSLLRemoveLast()
+{
+    struct sll list;
+    initSLL(&list);
+
+    int ret = addSLL(&list, 1);
+
+    ret = removeFirstSLL(&list);
+    TEST_ASSERT(ret == 1, "expected %d to be 1 \n", ret);
+
+    ret = removeFirstSLL(&list);
+    TEST_ASSERT(ret == INT_MIN, "expected %d to be %d \n", ret, INT_MIN);
+    
+    cleanSll(&list);
+}
 //TODO whitebox Test DLL init
+void testDLLInitWhite()
+{
+    struct doubleLinkedList list;
+    initDLL(&list);
+
+    TEST_ASSERT (list.first == NULL && list.last == NULL, "DLL list struct first is NULL \n");
+}
+
 //TODO whitebox Test DLL add
-//TODO whitebox Test DLL remove
-//TODO 
+void testDLLAddWhite()
+{
+    int data[] = {1,2,3,4};
+    struct doubleLinkedList list;
+    initDLL(&list);
+    
+    int ret = addDLL(&list, 1);
+    ret = addDLL(&list, 2);
+    ret = addDLL(&list, 3);
+    ret = addDLL(&list, 4);
+
+    struct dllElement* element = list.first;
+    int i = 0;
+    while(element != NULL){
+        int val = data[i++];
+        TEST_ASSERT ( element->data == val, "expected %d to be %d", element->data, val);
+        element = element->next;
+    }
+    cleanDll(&list);
+}
 
 void app_main() {
     printf("init\n");
@@ -140,5 +224,9 @@ void app_main() {
     TEST_RUN(testDLLAdd);
     TEST_RUN(testRemoveLastDLL);
     TEST_RUN(testRemoveFirstDLL);
+    TEST_RUN(testSLLInitWhite);
+    TEST_RUN(testSLLAddWhite);
+    TEST_RUN(testDLLInitWhite);
+    TEST_RUN(testDLLAddWhite);
     printf("all tests done!!");
 }

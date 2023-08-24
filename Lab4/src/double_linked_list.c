@@ -91,6 +91,18 @@ int removeLastDLL(struct doubleLinkedList* list) {
 }
 
 
+void cleanDll(struct doubleLinkedList* list){
+    struct dllElement *element = list->first;
+    while(element != NULL)
+    {
+        struct dllElement* temp = element->next;
+        free(element);
+        element = temp;
+    }
+
+	list->first = NULL;
+	list->last	= NULL;
+}
 
 
 
